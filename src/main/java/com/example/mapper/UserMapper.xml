@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.UserMapper">
+	
+	<!-- 根据登陆名称获取用户信息 -->
+	<select id="getUserByLoginName" resultMap="BaseResultMap" parameterType="User">
+		select u.id, u.avatar_id, u.nickname, CONCAT(f.path, f.filename) avatarpath,
+		u.loginname, u.password, 
+		u.age, sex, u.address, u.qq_uid, u.wechat_uid, u.weibo_uid, 
+		u.signnature, u.fbage, u.favorite_team, u.regdate, u.isadmin
+		from t_user u
+		left join t_file f on (u.avatar_id = f.id)
+		where loginname = #{loginname}
+	</select>
+	
+	<!-- 更新头像 -->
+	<update id="updateAvatar" parameterType="User">
+		update t_user set avatar_id = #{avatarId} where loginname = #{loginname}
+	</update>
+	
+	<select id="userLogin"  resultMap="BaseResultMap"  parameterType="User">
+		select <include refid="Base_Column_List" />
+		from t_user 
+		where  loginname = #{loginname} and password = #{password}
+	</select>
+	
+	<!-- 重设密码 -->
+	<update id="resetpwd" parameterType="User">
+		update t_user set password = #{password} where loginname = #{loginname}
+	</update>
+	
+	<select id="getPassword" resultType="String" parameterType="String">
+		select password from t_user where loginname = #{username}
+	</select>
+	
+	<!-- ==============================================================
+	======================自动生成的语句，对单表的增删改查==================== 
+	==============================================================-->
+	<resultMap id="BaseResultMap" type="com.example.model.User" >
+	    	<result column="avatar_id" property="avatarId" jdbcType="INTEGER" />
+	    	<result column="qq_uid" property="qqUid" jdbcType="VARCHAR" />
+	    	<result column="wechat_uid" property="wechatUid" jdbcType="VARCHAR" />
+	    	<result column="weibo_uid" property="weiboUid" jdbcType="VARCHAR" />
+	    	<result column="favorite_team" property="favoriteTeam" jdbcType="VARCHAR" />
+  	</resultMap>
+  	
+	<sql id="Base_Column_List">
+		id, avatar_id, nickname, loginname, password, age, sex, address, qq_uid, wechat_uid, weibo_uid, 
+		signnature, fbage, favorite_team, regdate, isadmin
+	</sql>
+	
+	<insert id="insertSelective" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+		insert into t_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="avatarId != null">
+				avatar_id,
+			</if>
+			<if test="nickname != null">
+				nickname,
+			</if>
+			
+			<if test="loginname != null">
+				loginname,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="age != null">
+				age,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="qqUid != null">
+				qq_uid,
+			</if>
+			<if test="wechatUid != null">
+				wechat_uid,
+			</if>
+			<if test="weiboUid != null">
+				weibo_uid,
+			</if>
+			<if test="signnature != null">
+				signnature,
+			</if>
+			<if test="fbage != null">
+				fbage,
+			</if>
+			<if test="favoriteTeam != null">
+				favorite_team,
+			</if>
+			<if test="regdate != null">
+				regdate,
+			</if>
+			<if test="isadmin != null">
+				isadmin,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="avatarId != null">
+				#{avatarId,jdbcType=INTEGER},
+			</if>
+			<if test="nickname != null">
+				#{nickname},
+			</if>
+			
+			<if test="loginname != null">
+				#{loginname},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="age != null">
+				#{age,jdbcType=INTEGER},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="qqUid != null">
+				#{qqUid,jdbcType=VARCHAR},
+			</if>
+			<if test="wechatUid != null">
+				#{wechatUid,jdbcType=VARCHAR},
+			</if>
+			<if test="weiboUid != null">
+				#{weiboUid,jdbcType=VARCHAR},
+			</if>
+			<if test="signnature != null">
+				#{signnature,jdbcType=VARCHAR},
+			</if>
+			<if test="fbage != null">
+				#{fbage,jdbcType=INTEGER},
+			</if>
+			<if test="favoriteTeam != null">
+				#{favoriteTeam,jdbcType=VARCHAR},
+			</if>
+			<if test="regdate != null">
+				#{regdate,jdbcType=DATE},
+			</if>
+			<if test="isadmin != null">
+				#{isadmin,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="User">
+		update t_user
+		<set>
+			<if test="avatarId != null">
+				avatar_id = #{avatarId,jdbcType=INTEGER},
+			</if>
+			<if test="nickname != null">
+				nickname = #{nickname},
+			</if>
+			
+			<if test="loginname != null">
+				loginname = #{loginname,jdbcType=VARCHAR},
+			</if>
+			<if test="signnature != null">
+				signnature = #{signnature,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="age != null">
+				age = #{age,jdbcType=INTEGER},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="qqUid != null">
+				qq_uid = #{qqUid,jdbcType=VARCHAR},
+			</if>
+			<if test="wechatUid != null">
+				wechat_uid = #{wechatUid,jdbcType=VARCHAR},
+			</if>
+			<if test="weiboUid != null">
+				weibo_uid = #{weiboUid,jdbcType=VARCHAR},
+			</if>
+			<if test="signnature != null">
+				signnature = #{signnature,jdbcType=VARCHAR},
+			</if>
+			<if test="fbage != null">
+				fbage = #{fbage,jdbcType=INTEGER},
+			</if>
+			<if test="favoriteTeam != null">
+				favorite_team = #{favoriteTeam,jdbcType=VARCHAR},
+			</if>
+			<if test="regdate != null">
+				regdate = #{regdate,jdbcType=DATE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_user
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    	select 
+	    	<include refid="Base_Column_List" />
+	    	from t_user
+	    	where id = #{id,jdbcType=INTEGER}
+  	</select>
+	
+	
+</mapper>
