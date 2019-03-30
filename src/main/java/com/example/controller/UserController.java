@@ -18,6 +18,8 @@ import com.example.model.ActionResult;
 import com.example.model.User;
 import com.example.service.UserService;
 
+import java.security.MessageDigest;
+
 @RestController
 @RequestMapping("/user/")
 public class UserController {
@@ -44,7 +46,7 @@ public class UserController {
 	
 	//更新一个用户信息
 	@PostMapping(value="update", consumes="application/json", produces="application/json" )
-	public ActionResult update(User user) {
+	public ActionResult update(@RequestBody User user) {
 		int cn = userService.update(user);
 		ActionResult ar = new ActionResult();
 		ar.setAct("action updte");
@@ -90,11 +92,16 @@ public class UserController {
 	
 	//重新设置用户的密码， 参数user中要设置用登录名称loginname, 新密码password 
 	@PostMapping(value="resetpwd", consumes="application/json", produces="application/json" )
-	public ActionResult resetpwd(@RequestBody User user) {
-		
-		int cn = userService.resetpwd(user);
+	public ActionResult resetpwd(@RequestBody User user, HttpSession session) {
 		ActionResult ar = new ActionResult();
 		ar.setAct("action reset password");
+		String name =  (String)session.getAttribute("loginname");
+		if(name==null) {
+			ar.setResult("fail");
+			return ar;
+		} 
+		user.setLoginname(name);
+		int cn = userService.resetpwd(user);
 		if(cn==1) {
 			ar.setResult("success");
 		}else {

@@ -25,7 +25,7 @@ public class TweetController {
 	
 	@Autowired
 	private TweetService tweetService;
-	
+		
 	//用户发送一个tweet
 	@PostMapping(value="save", consumes="application/json", produces="application/json" )
 	public ActionResult save(@RequestBody Tweet tweet, HttpSession session) {
@@ -80,8 +80,9 @@ public class TweetController {
 	}
 	
 	//删除一个tweet，参数tweet中需要设置 id 
-	@PostMapping(value="delete", consumes="application/json", produces="application/json" )
-	public ActionResult delete(@RequestBody Tweet tweet, HttpSession session) {
+	@GetMapping(value="delete/{tweetid}", produces="application/json" )
+	//public ActionResult delete(@RequestBody Tweet tweet, HttpSession session) {
+	public ActionResult delete(@PathVariable int tweetid, HttpSession session) {
 		
 		ActionResult ar = new ActionResult();
 		ar.setAct("action tweet delete");
@@ -91,6 +92,9 @@ public class TweetController {
 			ar.setResult("failed to get user id, you should login");
 			return ar;
 		}
+		
+		Tweet tweet = new Tweet();
+		tweet.setId(tweetid);
 		tweet.setUserid(uid);
 		
 		int cn = tweetService.delete(tweet);
@@ -108,8 +112,6 @@ public class TweetController {
 	public Tweet selectOne(@PathVariable int id) {
 		return tweetService.selectOne(id);
 	}
-	
-	
 	
 	
 }

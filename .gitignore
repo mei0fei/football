@@ -9,6 +9,7 @@
 .settings
 .springBeans
 .sts4-cache
+src/main/webapp/upload/files
 
 ### IntelliJ IDEA ###
 .idea
